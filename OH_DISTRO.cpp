@@ -93,11 +93,13 @@ for (int i = 0; i < nooa; i ++)
 }
 
 double binsize = max/nbins;
-int bin[nbins];
+double bin[nbins];
 for (int i = 0; i < nbins; i ++)
 {
 	bin[i] = 0;
 }
+
+double sum = 0.0;
 
 for (int i = 0; i < nframes; i ++)
 {
@@ -134,55 +136,32 @@ for (int i = 0; i < nframes; i ++)
 			{
 				int bin_number = nlist2[j][k]/binsize;
 				bin[bin_number] ++;
+				sum += nlist2[j][k];
 			}
 		}
 	}							
 }
 
-cout << "\nCALCULATED DISTROBUTION\n";
+cout << "\nCALCULATED DISTRIBUTION...\n";
 
 ofstream output;
 output.open("OHD.dat");	
 
+double mean = sum / (nframes*noha);
+cout << "THE AVERAGE OH BOND LENGTH = " << mean << " ANGSTROMS...\n";
+
 for (int i = 0; i < nbins; i ++)
 {
-	output << i*binsize << "\t" << bin[i] << endl;
-	output << (i + 1)*binsize << "\t" << bin[i] << endl;
+	output << i*binsize << "\t" << 100.0*(bin[i]/(nframes*noha)) << "\t" << mean << "\t" << 100.0*(bin[i]/(nframes*noha)) << endl;
+	output << (i + 1)*binsize << "\t" << 100.0*(bin[i]/(nframes*noha)) << "\t" << mean << "\t" << 100.0*(bin[i]/(nframes*noha)) << endl;
 }
 
-cout << "\nOUTPUTTED DATA TO OHD.dat.\n";
+cout << "\nOUTPUTTED DATA TO OHD.dat.\n\n";
 
 input.close();
 output.close();
 return 0;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
