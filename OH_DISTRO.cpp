@@ -139,16 +139,18 @@ for (int i = 0; i < nframes; i ++)
 	}							
 }
 
-
+cout << "\nCALCULATED DISTROBUTION\n";
 
 ofstream output;
 output.open("OHD.dat");	
 
 for (int i = 0; i < nbins; i ++)
 {
-	output << i << "\t" << bin[i] << endl;
-	output << i + 1 << "\t" << bin[i] << endl;
+	output << i*binsize << "\t" << bin[i] << endl;
+	output << (i + 1)*binsize << "\t" << bin[i] << endl;
 }
+
+cout << "\nOUTPUTTED DATA TO OHD.dat.\n";
 
 input.close();
 output.close();
