@@ -47,6 +47,7 @@ input.open(infile.c_str());
 
 // go through the input file 
 string stuff;
+double xval, yval, zval;
 vector <double> ox, oy, oz, hx, hy, hz;
 
 while(! input.eof())
@@ -55,13 +56,21 @@ while(! input.eof())
 	
 	if(stuff == "O")
 	{
-		input >> ox >> oy >> oz;
+		input >> xval >> yval >> zval;
+		ox.push_back(xval);
+		oy.push_back(yval);
+		oz.push_back(zval);
 	}
+	
 	if(stuff == "H")
 	{
-		input >> hx >> hy >> hz;
+		input >> xval >> yval >> zval;
+		hx.push_back(xval);
+		hy.push_back(yval);
+		hz.push_back(zval);
 	}
 }
+
 cout << "\nREAD INPUTFILE...\n";
 
 // declare the number of frames
