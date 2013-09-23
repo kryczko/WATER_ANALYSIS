@@ -41,15 +41,19 @@ ofstream hbonds_outputfile;
 
 string infile;
 int timesteps, nooa, noha;
-double xlat, ylat, zlat;
+double lattice;
 
-cout << "XYZ file:\n==>  ";
+cout << "Please enter the filename of your file: ";
 cin >> infile;
-cout << "Number of atoms (e.g. 2 & 4 for 2 oxygen and 4 hydrogens):\n==> ";
-cin >> nooa >> noha;
-cout << "Unit cell dimensions (e.g. 10.0 10.0 10.0):\n==> ";
-cin >> xlat >> ylat >> zlat;
-cout << "\nPROGRAM RUNING, PLEASE WAIT.\n\n";
+cout << "Please enter the number of oxygen atoms: ";
+cin >> nooa;
+cout << "Please enter the number of hydrogen atoms: ";
+cin >> noha;
+cout << "Please enter the number of timesteps: ";
+cin >> timesteps;
+cout << "Please enter the lattice constant for your periodic cube: ";
+cin >> lattice;
+cout << "Program running...please wait a moment.\n\n";
 // end of main menu*/
 
 //read the inputfile
@@ -57,27 +61,13 @@ inputfile.open(infile.c_str());
 
 int noa = nooa + noha;
 
-vector <double> ox, oy, oz, hx, hy, hz;
-double xdat, ydat, zdat;
-string data;
+double x[noa*timesteps], y[noa*timesteps], z[noa*timesteps];
+int counter = 0;
 
 while (!inputfile.eof())
 {
-	inputfile >> data;
-	if (data == "O")
-	{
-		inputfile >> xdat >> ydat >> zdat;
-		ox.push_back(xdat);
-		oy.push_back(ydat);
-		oz.push_back(zdat);
-	}
-	if (data == "H")
-	{
-		inputfile >> xdat >> ydat >> zdat;
-		ox.push_back(xdat);
-		oy.push_back(ydat);
-		oz.push_back(zdat);
-	}
+	inputfile >> x[counter] >> y[counter] >> z[counter];	
+	counter ++;
 
 }
 
@@ -103,16 +93,16 @@ for (int i = 0; i < timesteps; i ++)
 {
 	for (int j = 0; j < nooa; j ++)
 	{
-		oxyz[j][0] = ox[j + i*nooa];
-		oxyz[j][1] = oy[j + i*nooa];
-		oxyz[j][2] = oz[j + i*nooa];
+		oxyz[j][0] = lattice*x[j + i*noa];
+		oxyz[j][1] = lattice*y[j + i*noa];
+		oxyz[j][2] = lattice*z[j + i*noa];
 		hcount[j] = 0;
 	}
 	for (int j = 0; j < noha; j ++)
 	{
-		hxyz[j][0] = hx[j + i*noha];
-		hxyz[j][1] = hy[j + i*noha];
-		hxyz[j][2] = hz[j + i*noha];
+		hxyz[j][0] = lattice*x[nooa + j + i*noa];
+		hxyz[j][1] = lattice*y[nooa + j + i*noa];
+		hxyz[j][2] = lattice*z[nooa + j + i*noa];
 	}
 	for (int j = 0; j < nooa; j++)
 	{
@@ -124,9 +114,9 @@ for (int i = 0; i < timesteps; i ++)
 			double dy = oxyz[j][1] - hxyz[k][1];
 			double dz = oxyz[j][2] - hxyz[k][2];
 	
-			dx -= xlat*pbc_round(dx/xlat);
-			dy -= ylat*pbc_round(dy/ylat);
-			dz -= zlat*pbc_round(dz/zlat);			
+			dx -= lattice*pbc_round(dx/lattice);
+			dy -= lattice*pbc_round(dy/lattice);
+			dz -= lattice*pbc_round(dz/lattice);			
 	
 			double ohdist = sqrt ( dx*dx + dy*dy + dz*dz );
 	
@@ -149,9 +139,9 @@ for (int i = 0; i < timesteps; i ++)
 			double ody = oxyz[j][1] - oxyz[k][1];
 			double odz = oxyz[j][2] - oxyz[k][2];
 
-			odx -= xlat*pbc_round(odx/xlat);
-                        ody -= ylat*pbc_round(ody/ylat);
-                        odz -= zlat*pbc_round(odz/zlat);
+			odx -= lattice*pbc_round(odx/lattice);
+                        ody -= lattice*pbc_round(ody/lattice);
+                        odz -= lattice*pbc_round(odz/lattice);
 
 
 			double oodist = sqrt (odx*odx + ody*ody + odz*odz );
@@ -168,9 +158,9 @@ for (int i = 0; i < timesteps; i ++)
 					double hdy = oxyz[j][1] - hxyz[ohindices[k][n]][1];
 					double hdz = oxyz[j][2] - hxyz[ohindices[k][n]][2];
 				
-					hdx -= xlat*pbc_round(hdx/zlat);
-                        		hdy -= ylat*pbc_round(hdy/ylat);
-                        		hdz -= zlat*pbc_round(hdz/zlat);
+					hdx -= lattice*pbc_round(hdx/lattice);
+                        		hdy -= lattice*pbc_round(hdy/lattice);
+                        		hdz -= lattice*pbc_round(hdz/lattice);
 
 					double hdist = sqrt( hdx*hdx + hdy*hdy + hdz*hdz );
 					double dot = odx*hdx + ody*hdy + odz*hdz;
@@ -190,9 +180,9 @@ for (int i = 0; i < timesteps; i ++)
                                         double hdy = oxyz[j][1] - hxyz[ohindices[k][n]][1];
                                         double hdz = oxyz[j][2] - hxyz[ohindices[k][n]][2];
 
-                                        hdx -= xlat*pbc_round(hdx/xlat);
-                                        hdy -= ylat*pbc_round(hdy/ylat);
-                                        hdz -= zlat*pbc_round(hdz/zlat);
+                                        hdx -= lattice*pbc_round(hdx/lattice);
+                                        hdy -= lattice*pbc_round(hdy/lattice);
+                                        hdz -= lattice*pbc_round(hdz/lattice);
 
                                         double hdist = sqrt( hdx*hdx + hdy*hdy + hdz*hdz );
                                         double dot = odx*hdx + ody*hdy + odz*hdz;
