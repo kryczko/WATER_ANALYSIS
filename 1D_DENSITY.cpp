@@ -127,21 +127,46 @@ int main()
 	
 	double xinc = xlat/nbins, yinc = ylat/nbins, zinc = zlat/nbins;
 	double xvolume = xinc*ylat*zlat, yvolume =xlat*yinc*zlat, zvolume = xlat*ylat*zinc;
+	
+	int xcount(0), ycount(0), zcount(0);
+	double xsum=0, ysum=0, zsum=0, xmean, ymean, zmean;
+	for (int i = 0; i < nbins; i ++)
+	{
+		if (xbin[i]*conversion/(xvolume*nframes) != 0)
+		{
+			xsum += xbin[i]*conversion/(xvolume*nframes);
+			xcount ++;
+		}
+		if ((ybin[i]*conversion)/(yvolume*nframes) != 0)
+		{
+			ysum += (ybin[i]*conversion)/(yvolume*nframes);
+			ycount ++;
+		}
+		if (zbin[i]*conversion/(zvolume*nframes)!= 0)
+		{
+			zsum += zbin[i]*conversion/(zvolume*nframes);
+			zcount ++;
+		}
+	}
+	xmean = xsum / xcount;
+	ymean = ysum / ycount;
+	zmean = zsum / zcount;
+	
 
 	for (int i = 0; i < nbins; i ++)
 	{
-		xdens << i*xbinsize << "\t" << xbin[i]*conversion/(xvolume*nframes) << endl;
-		xdens << (i+1)*xbinsize << "\t" << xbin[i]*conversion/(xvolume*nframes) << endl;
+		xdens << i*xbinsize << "\t" << xbin[i]*conversion/(xvolume*nframes) << "\t" << xmean << endl;
+		xdens << (i+1)*xbinsize << "\t" << xbin[i]*conversion/(xvolume*nframes) << "\t" << xmean << endl;
 	}
 	for (int i = 0; i < nbins; i ++)
         {
-                ydens << i*ybinsize << "\t" << (ybin[i]*conversion)/(yvolume*nframes) << endl;
-                ydens << (i+1)*ybinsize << "\t" << ybin[i]*conversion/(yvolume*nframes) << endl;
+                ydens << i*ybinsize << "\t" << (ybin[i]*conversion)/(yvolume*nframes) << "\t" << ymean << endl;
+                ydens << (i+1)*ybinsize << "\t" << ybin[i]*conversion/(yvolume*nframes) << "\t" << ymean << endl;
         }
 	for (int i = 0; i < nbins; i ++)
         {
-                zdens << i*zbinsize << "\t" << zbin[i]*conversion/(zvolume*nframes)  << endl;
-                zdens << (i+1)*zbinsize << "\t" << zbin[i]*conversion/(zvolume*nframes) << endl;
+                zdens << i*zbinsize << "\t" << zbin[i]*conversion/(zvolume*nframes)  << "\t" << zmean << endl;
+                zdens << (i+1)*zbinsize << "\t" << zbin[i]*conversion/(zvolume*nframes) << "\t" << zmean << endl;
         }
 	//###################################################################
 	
