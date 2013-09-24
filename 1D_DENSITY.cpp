@@ -22,7 +22,7 @@ int main()
 	cin >> natoms;
 	cout << "Number of bins:\n==> ";
 	cin >> nbins;
-	cout << Heavy water? (y or n):\n==> ";
+	cout << "Heavy water? (y or n):\n==> ";
 	cin >> convert;
 
 	ifstream input;
