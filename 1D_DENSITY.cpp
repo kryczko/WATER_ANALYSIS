@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-	string infile, atomname;
+	string infile, atomname, convert;
 	double xlat, ylat, zlat;
 	int nbins, natoms;
 
@@ -22,6 +22,8 @@ int main()
 	cin >> natoms;
 	cout << "Number of bins:\n==> ";
 	cin >> nbins;
+	cout << Heavy water? (y or n):\n==> ";
+	cin >> convert;
 
 	ifstream input;
 	input.open(infile.c_str());
@@ -124,7 +126,11 @@ int main()
 	zdens.open("zdensity.dat");
 
 	double conversion = 18.0e-6/(6.023e23*1.0e-30); // go to from mol/A^3 to g/cc
-	
+	if (convert = "y")
+	{
+		conversion = 20.0e-6/(6.023e23*1.0e-30); // go to from mol/A^3 to g/cc;
+	}	
+
 	double xinc = xlat/nbins, yinc = ylat/nbins, zinc = zlat/nbins;
 	double xvolume = xinc*ylat*zlat, yvolume =xlat*yinc*zlat, zvolume = xlat*ylat*zinc;
 	
