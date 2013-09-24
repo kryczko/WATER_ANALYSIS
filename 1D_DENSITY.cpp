@@ -126,7 +126,7 @@ int main()
 	zdens.open("zdensity.dat");
 
 	double conversion = 18.0e-6/(6.023e23*1.0e-30); // go to from mol/A^3 to g/cc
-	if (convert = "y")
+	if (convert == "y")
 	{
 		conversion = 20.0e-6/(6.023e23*1.0e-30); // go to from mol/A^3 to g/cc;
 	}	
