@@ -9,6 +9,22 @@ This can be used for metal-water interfaces as well.*/
 
 using namespace std;
 
+
+//function to find the minimum of the vector
+double minval(vector <double> array, int array_length)
+{
+	double min = array[0];
+	
+	for (int i = 1; i < array_length; i ++)
+	{
+		if (array[i] < min)
+		{
+			min = array[i];
+		}
+	}
+return min;
+}
+
 //function to deal with periodic boundary conditions
 int pbc_round(double input)
 {
@@ -65,7 +81,7 @@ int nframes = ox.size()/nooa;
 
 //go through the data and calculate some distances!
 
-
+vector <double> second_distances, final_distances;
 
 for (int i = 0; i < nframes; i ++)
 {
@@ -91,8 +107,32 @@ for (int i = 0; i < nframes; i ++)
 			}
 		}
 
-
+		second_distances.push_back(minval(distances, nooa));
+	}
+	
+	for (int j = 0; j < second_distances.size(); j ++)
+	{
+		double value = second_distances[j];
 		
+		for (int k = 0; k < second_distances.size(); k ++)
+		{
+			if (j != k && value == second_distances[k])
+			{
+				final_distances.push_back(value);
+			}
+		}
+	}
+}
+
+cout << final_distance.size() << endl;
+
+input.close();
+return 0;
+}
+				
+	
+
+	
 
 
 
