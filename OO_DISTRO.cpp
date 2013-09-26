@@ -39,7 +39,7 @@ return i;
 }
 
 //this is the main function
-def main()
+int main()
 {
 
 // this is the main menu
@@ -76,15 +76,19 @@ while(! input.eof())
 	}
 }
 
+cout << "\n Read input file. \n\n";
+
 //number of frames
 int nframes = ox.size()/nooa;
 
 //go through the data and calculate some distances!
 
-vector <double> second_distances, final_distances;
+vector <double> final_distances;
 
 for (int i = 0; i < nframes; i ++)
 {
+	vector <double> second_distances;
+
 	for (int j = 0; j < nooa; j ++)
 	{
 		vector <double> distances;
@@ -99,7 +103,7 @@ for (int i = 0; i < nframes; i ++)
 		
 				dx -= xlat*pbc_round(dx/xlat);
 				dy -= ylat*pbc_round(dy/ylat);
-				dz -= zlat&pbc_round(dz/zlat);
+				dz -= zlat*pbc_round(dz/zlat);
 
 				double dist = sqrt( dx*dx + dy*dy + dz*dz );
 
@@ -108,23 +112,30 @@ for (int i = 0; i < nframes; i ++)
 		}
 
 		second_distances.push_back(minval(distances, nooa));
+	
 	}
 	
+	cout << second_distances.size() << endl;
+
 	for (int j = 0; j < second_distances.size(); j ++)
-	{
+	{	
 		double value = second_distances[j];
 		
 		for (int k = 0; k < second_distances.size(); k ++)
 		{
 			if (j != k && value == second_distances[k])
 			{
-				final_distances.push_back(value);
+				second_distances.erase(second_distances.begin()+k);
 			}
 		}
 	}
+	
+	cout << second_distances.size() << endl;
+
+		
 }
 
-cout << final_distance.size() << endl;
+cout << nframes << "\t" <<final_distances.size() << endl;
 
 input.close();
 return 0;
