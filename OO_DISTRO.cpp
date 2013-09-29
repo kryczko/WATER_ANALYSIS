@@ -95,6 +95,7 @@ for (int i = 0; i < nbins; i ++)
 }
 double incr = max / nbins;
 int numsum = 0;
+double distsum = 0.0;
 for (int i = 0; i < nframes; i ++)
 {
 	vector <double> second_distances;
@@ -143,16 +144,18 @@ for (int i = 0; i < nframes; i ++)
 
 	for (int j = 0; j < second_distances.size(); j ++)
 	{
+		distsum += second_distances[j];
 		int bin_num = second_distances[j]/incr;
 		bin[bin_num] ++; 
 	}
 		
 }
+double average = distsum / numsum;
 
 for (int i = 0; i < nbins; i ++)
 {
-	output << i*incr << "\t" << 100*bin[i]/(numsum) << endl;
-	output << (i+1)*incr << "\t" << 100*bin[i]/(numsum) << endl;
+	output << i*incr << "\t" << 100*bin[i]/(numsum) << "\t" << average << "\t" << 100*bin[i]/numsum << endl;
+	output << (i+1)*incr << "\t" << 100*bin[i]/(numsum) << "\t" << average << "\t" << 100*bin[i]/numsum << endl;
 } 
 
 output.close();
