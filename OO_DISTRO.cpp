@@ -44,7 +44,7 @@ int main()
 
 // this is the main menu
 string infile;
-double xlat, ylat, zlat;
+double max, xlat, ylat, zlat;
 int nooa, nbins;
 
 cout << "XYZ file:\n==> ";
@@ -55,6 +55,8 @@ cout << "Number of oxygen atoms:\n==> ";
 cin >> nooa;
 cout << "Number of bins:\n==> ";
 cin >> nbins;
+cout << "Max distance (Angstroms):\n==> ";
+cin >> max;
 
 //open the file and extract the data
 ifstream input;
@@ -84,7 +86,15 @@ int nframes = ox.size()/nooa;
 //go through the data and calculate some distances!
 
 vector <double> final_distances;
-
+ofstream output;
+output.open("OO_DISTRO.dat");
+double bin[nbins];
+for (int i = 0; i < nbins; i ++)
+{
+	bin[i] = 0;
+}
+double incr = max / nbins;
+int numsum = 0;
 for (int i = 0; i < nframes; i ++)
 {
 	vector <double> second_distances;
@@ -108,35 +118,44 @@ for (int i = 0; i < nframes; i ++)
 				double dist = sqrt( dx*dx + dy*dy + dz*dz );
 
 				distances.push_back(dist);
+			
 			}
 		}
 
-		second_distances.push_back(minval(distances, nooa));
+		second_distances.push_back(minval(distances, distances.size()));
 	
 	}
 	
-	cout << second_distances.size() << endl;
-
-	for (int j = 0; j < second_distances.size(); j ++)
-	{	
-		double value = second_distances[j];
-		
+	
+	
+	for (int j = 0; j <  second_distances.size(); j ++)
+	{
 		for (int k = 0; k < second_distances.size(); k ++)
 		{
-			if (j != k && value == second_distances[k])
+			if (j != k && second_distances[j] == second_distances[k])
 			{
 				second_distances.erase(second_distances.begin()+k);
 			}
 		}
 	}
-	
-	cout << second_distances.size() << endl;
 
+	numsum += second_distances.size();
+
+	for (int j = 0; j < second_distances.size(); j ++)
+	{
+		int bin_num = second_distances[j]/incr;
+		bin[bin_num] ++; 
+	}
 		
 }
 
-cout << nframes << "\t" <<final_distances.size() << endl;
+for (int i = 0; i < nbins; i ++)
+{
+	output << i*incr << "\t" << 100*bin[i]/(numsum) << endl;
+	output << (i+1)*incr << "\t" << 100*bin[i]/(numsum) << endl;
+} 
 
+output.close();
 input.close();
 return 0;
 }
